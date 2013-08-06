@@ -23,7 +23,7 @@ module ItunesValidator
       post_body['receipt-data'] = receipt_data
       post_body['password'] = @shared_secret if @shared_secret
 
-      receipt = false
+      receipt = nil
 
       uri = URI(APPSTORE_VERIFY_URL_PRODUCTION)
       begin
