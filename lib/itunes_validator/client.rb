@@ -23,7 +23,7 @@ module ItunesValidator
       post_body['receipt-data'] = receipt_data
       post_body['password'] = @shared_secret if @shared_secret
 
-      receipt = nil
+      receipt_info = nil
 
       uri = URI(APPSTORE_VERIFY_URL_PRODUCTION)
       begin
@@ -38,7 +38,7 @@ module ItunesValidator
 
           case itunes_status = response_body['status'].to_i
           when 0
-            receipt = response_body['receipt']
+            receipt_info = response_body['receipt']
           else
             raise ItunesValidationError.new(itunes_status)
           end
@@ -51,7 +51,7 @@ module ItunesValidator
         end
       end
 
-      receipt
+      Receipt.from_h(receipt_info) if receipt_info
     end
   end
 
