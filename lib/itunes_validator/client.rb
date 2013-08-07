@@ -34,6 +34,7 @@ module ItunesValidator
           req.body = post_body.to_json
 
           response = http.request(req)
+          raise ItunesCommunicationError.new(response.code) unless response.code == '200'
           response_body = JSON.parse(response.body)
 
           case itunes_status = response_body['status'].to_i
@@ -43,6 +44,7 @@ module ItunesValidator
             raise ItunesValidationError.new(itunes_status)
           end
         end
+      rescue ItunesCommunicationError
       rescue ItunesValidationError => e
         case e.code
         when 21007
@@ -59,6 +61,14 @@ module ItunesValidator
   end
 
   class ParameterError < Error
+  end
+
+  class ItunesCommunicationError < Error
+    def initialize(code)
+      @code = code
+    end
+
+    attr_reader :code
   end
 
   class ItunesValidationError < Error
