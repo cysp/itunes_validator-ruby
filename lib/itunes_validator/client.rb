@@ -14,6 +14,7 @@ module ItunesValidator
   class Client
     def initialize(options=nil)
       @shared_secret = options[:shared_secret] if options
+      @use_latest = (options[:use_latest] if options) || true
     end
 
     def validate(receipt_data)
@@ -40,6 +41,9 @@ module ItunesValidator
           case itunes_status = response_body['status'].to_i
           when 0
             receipt_info = response_body['receipt']
+            if @use_latest && response_body['latest_receipt_info']
+              receipt_info = response_body['latest_receipt_info']
+            end
           else
             raise ItunesValidationError.new(itunes_status)
           end
