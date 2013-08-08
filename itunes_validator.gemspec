@@ -1,6 +1,6 @@
 # vim: sw=2 et
 
-require File.expand_path('../lib/itunes_validator/version', __FILE__)
+require File.expand_path('../lib/itunes_validator', __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = 'itunes_validator'
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/cysp/itunes_validator-ruby'
 
   meta_files    = %w| LICENSE README.md |
-  lib_files     = %w| lib/itunes_validator.rb lib/itunes_validator/client.rb lib/itunes_validator/receipt.rb lib/itunes_validator/version.rb |
+  lib_files     = %w| lib/itunes_validator.rb lib/itunes_validator/client.rb lib/itunes_validator/receipt.rb |
   s.files       = meta_files + lib_files
 
   s.add_development_dependency 'rake'

@@ -1,6 +1,6 @@
 require_relative 'itunes_validator/client'
 require_relative 'itunes_validator/receipt'
-require_relative 'itunes_validator/version'
 
 module ItunesValidator
+  VERSION = '0.3.1'
 end
