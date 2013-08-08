@@ -15,6 +15,7 @@ module ItunesValidator
     def initialize(options=nil)
       @shared_secret = options[:shared_secret] if options
       @use_latest = (options[:use_latest] if options) || true
+      @return_latest_too = (options[:return_latest_too] if options) || true
     end
 
     def validate(receipt_data)
@@ -24,7 +25,7 @@ module ItunesValidator
       post_body['receipt-data'] = receipt_data
       post_body['password'] = @shared_secret if @shared_secret
 
-      receipt_info = nil
+      receipt_info = latest_receipt_info = nil
 
       uri = URI(APPSTORE_VERIFY_URL_PRODUCTION)
       begin
@@ -41,9 +42,7 @@ module ItunesValidator
           case itunes_status = response_body['status'].to_i
           when 0
             receipt_info = response_body['receipt']
-            if @use_latest && response_body['latest_receipt_info']
-              receipt_info = response_body['latest_receipt_info']
-            end
+            latest_receipt_info = response_body['latest_receipt_info']
           else
             raise ItunesValidationError.new(itunes_status)
           end
@@ -57,7 +56,17 @@ module ItunesValidator
         end
       end
 
-      Receipt.from_h(receipt_info) if receipt_info
+      receipts = [receipt_info, latest_receipt_info].map{ |ri| Receipt.from_h(ri) if ri }
+
+      if @use_latest
+        return receipts.compact.last
+      end
+
+      if @return_latest_too
+        return receipts
+      end
+
+      receipts[0]
     end
   end
 
