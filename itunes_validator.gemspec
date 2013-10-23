@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = 'iTunes Receipt validation'
   s.homepage    = 'https://github.com/cysp/itunes_validator-ruby'
 
-  meta_files    = %w| LICENSE README.md Rakefile |
+  meta_files    = %w| LICENSE README.md Rakefile itunes_validator.gemspec |
   lib_files     = %w| lib/itunes_validator.rb lib/itunes_validator/client.rb lib/itunes_validator/receipt.rb |
   test_files    = `git ls-files test`.split($/)
   s.test_files  = test_files.select{ |f| File.extname(f) == 'rb' }
