@@ -16,6 +16,7 @@ module ItunesValidator
       @shared_secret = options[:shared_secret] if options
       @use_latest = (options[:use_latest] if options) || true
       @return_latest_too = (options[:return_latest_too] if options) || true
+      @proxy = [options[:proxy_host], options[:proxy_port] || 8080] if options and options[:proxy_host]
     end
 
     def validate(receipt_data)
@@ -29,7 +30,9 @@ module ItunesValidator
 
       uri = URI(APPSTORE_VERIFY_URL_PRODUCTION)
       begin
-        Net::HTTP.start(uri.host, uri.port, {use_ssl: true}) do |http|
+        h = Net::HTTP::Proxy(*@proxy) if @proxy
+        h = Net::HTTP unless h
+        h.start(uri.host, uri.port, {use_ssl: true}) do |http|
           req = Net::HTTP::Post.new(uri.request_uri)
           req['Accept'] = 'application/json'
           req['Content-Type'] = 'application/json'
