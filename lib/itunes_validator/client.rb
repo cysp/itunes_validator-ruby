@@ -16,7 +16,7 @@ module ItunesValidator
       @shared_secret = options[:shared_secret] if options
       @use_latest = (options[:use_latest] if options) || true
       @return_latest_too = (options[:return_latest_too] if options) || true
-      @proxy = [options[:proxy_host], options[:proxy_port] || 8080] if options and options[:proxy_host]
+      @proxy = [options[:proxy_host], options[:proxy_port] || 8080] if (options && options[:proxy_host])
     end
 
     def validate(receipt_data)
