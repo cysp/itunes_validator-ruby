@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
 
   meta_files    = %w| LICENSE README.md Rakefile itunes_validator.gemspec |
   lib_files     = %w| lib/itunes_validator.rb lib/itunes_validator/client.rb lib/itunes_validator/receipt.rb |
-  test_files    = `git ls-files test`.split($/)
-  s.test_files  = test_files.select{ |f| File.extname(f) == 'rb' }
+  test_files    = %w| test/coverage.rb test/test_itunes_validator.rb |
+  s.test_files  = test_files.select{ |f| File.extname(f) == 'rb' && File.basename(f).start_with?('test_') }
   s.files       = meta_files + lib_files + test_files
 
   s.add_development_dependency 'rake'
