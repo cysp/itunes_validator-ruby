@@ -20,22 +20,18 @@ module ItunesValidator
     end
 
     def validate(receipt_data)
-      raise ParameterError unless receipt_data
+      raise ParameterError unless (receipt_data && !receipt_data.strip.empty?)
 
-      post_body = {}
-      post_body['receipt-data'] = receipt_data
-      post_body['password'] = @shared_secret if @shared_secret
+      post_body = { 'receipt-data' => receipt_data }
+      post_body['password'] = @shared_secret if @shared_secret && !@shared_secret.strip.empty?
 
       receipt_info = latest_receipt_info = nil
 
       uri = URI(APPSTORE_VERIFY_URL_PRODUCTION)
       begin
-        h = Net::HTTP::Proxy(*@proxy) if @proxy
-        h = Net::HTTP unless h
-        h.start(uri.host, uri.port, {use_ssl: true}) do |http|
-          req = Net::HTTP::Post.new(uri.request_uri)
-          req['Accept'] = 'application/json'
-          req['Content-Type'] = 'application/json'
+        h = @proxy ? Net::HTTP::Proxy(*@proxy) : Net::HTTP
+        h.start(uri.host, uri.port, use_ssl: true) do |http|
+          req = Net::HTTP::Post.new(uri.request_uri, {'Accept' => 'application/json', 'Content-Type'=>'applications/json'})
           req.body = post_body.to_json
 
           response = http.request(req)
@@ -43,19 +39,19 @@ module ItunesValidator
           response_body = JSON.parse(response.body)
 
           case itunes_status = response_body['status'].to_i
-          when 0
-            receipt_info = response_body['receipt']
-            latest_receipt_info = response_body['latest_receipt_info']
-          else
-            raise ItunesValidationError.new(itunes_status)
+            when 0
+              receipt_info = response_body['receipt']
+              latest_receipt_info = response_body['latest_receipt_info']
+            else
+              raise ItunesValidationError.new(itunes_status)
           end
         end
       rescue ItunesCommunicationError
       rescue ItunesValidationError => e
         case e.code
-        when 21007
-          uri = URI(APPSTORE_VERIFY_URL_SANDBOX)
-          retry
+          when 21007
+            uri = URI(APPSTORE_VERIFY_URL_SANDBOX)
+            retry
         end
       end
 
