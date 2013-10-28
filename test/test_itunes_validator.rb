@@ -81,6 +81,12 @@ class TestItunesValidator < Test::Unit::TestCase
     assert_raises(ItunesValidator::ParameterError) do
       ItunesValidator.validate(nil)
     end
+    assert_raises(ItunesValidator::ParameterError) do
+      ItunesValidator.validate('')
+    end
+    assert_raises(ItunesValidator::ParameterError) do
+      ItunesValidator.validate(' ')
+    end
   end
 
   def test_invalid_parameters_no_receipt
