@@ -31,7 +31,7 @@ module ItunesValidator
       begin
         h = @proxy ? Net::HTTP::Proxy(*@proxy) : Net::HTTP
         h.start(uri.host, uri.port, use_ssl: true) do |http|
-          req = Net::HTTP::Post.new(uri.request_uri, {'Accept' => 'application/json', 'Content-Type'=>'applications/json'})
+          req = Net::HTTP::Post.new(uri.request_uri, {'Accept' => 'application/json', 'Content-Type'=>'application/json'})
           req.body = post_body.to_json
 
           response = http.request(req)
