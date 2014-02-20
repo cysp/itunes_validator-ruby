@@ -55,7 +55,7 @@ module ItunesValidator
         end
       end
 
-      receipts = [receipt_info, latest_receipt_info].map{ |ri| Receipt.from_h(ri) if ri }
+      receipts = [receipt_info, *latest_receipt_info].map{ |ri| Receipt.from_h(ri) if ri }
 
       if @use_latest
         return receipts.compact.last
