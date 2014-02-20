@@ -3,8 +3,8 @@ rvm:
   - 1.9.3
   - 2.0.0
   - rbx-19mode
-before_install:
-  - gem install coveralls
+#before_install:
+#  - gem install coveralls
 before_script:
   - openssl aes-256-cbc -k "$RECEIPT_KEY" -d -in test/f/receipt.enc -out test/f/receipt
 script: rake -s test RECEIPT_DATA=`openssl base64 < test/f/receipt | tr -d '\n'`
