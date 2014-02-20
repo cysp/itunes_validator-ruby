@@ -1,5 +1,6 @@
 require 'json'
 require 'net/https'
+require 'openssl'
 require 'uri'
 
 module ItunesValidator
@@ -30,7 +31,7 @@ module ItunesValidator
       uri = URI(APPSTORE_VERIFY_URL_PRODUCTION)
       begin
         h = @proxy ? Net::HTTP::Proxy(*@proxy) : Net::HTTP
-        h.start(uri.host, uri.port, use_ssl: true) do |http|
+        h.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
           req = Net::HTTP::Post.new(uri.request_uri, {'Accept' => 'application/json', 'Content-Type'=>'application/json'})
           req.body = post_body.to_json
 
