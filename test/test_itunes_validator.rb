@@ -26,7 +26,9 @@ class TestItunesValidator < Test::Unit::TestCase
     receipt_data=ENV['RECEIPT_DATA']
     return unless receipt_data
 
-    v = ItunesValidator::Client.new()
+    shared_secret=ENV['SHARED_SECRET']
+
+    v = ItunesValidator::Client.new({shared_secret: shared_secret})
     r = v.validate(receipt_data)
     assert_not_nil(r)
   end
@@ -38,7 +40,9 @@ class TestItunesValidator < Test::Unit::TestCase
     receipt_data=ENV['RECEIPT_DATA']
     return unless receipt_data
 
-    r = ItunesValidator.validate(receipt_data)
+    shared_secret=ENV['SHARED_SECRET']
+
+    r = ItunesValidator.validate({shared_secret: shared_secret}, receipt_data)
     assert_not_nil(r)
   end
 
@@ -52,7 +56,9 @@ class TestItunesValidator < Test::Unit::TestCase
     receipt_data=ENV['RECEIPT_DATA']
     return unless receipt_data
 
-    v = ItunesValidator::Client.new({proxy_host: proxy_host, proxy_port: proxy_port})
+    shared_secret=ENV['SHARED_SECRET']
+
+    v = ItunesValidator::Client.new({proxy_host: proxy_host, proxy_port: proxy_port, shared_secret: shared_secret})
     r = v.validate(receipt_data)
     assert_not_nil(r)
   end
@@ -67,7 +73,9 @@ class TestItunesValidator < Test::Unit::TestCase
     receipt_data=ENV['RECEIPT_DATA']
     return unless receipt_data
 
-    r = ItunesValidator.validate({proxy_host: proxy_host, proxy_port: proxy_port}, receipt_data)
+    shared_secret=ENV['SHARED_SECRET']
+
+    r = ItunesValidator.validate({proxy_host: proxy_host, proxy_port: proxy_port, shared_secret: shared_secret}, receipt_data)
     assert_not_nil(r)
   end
 
