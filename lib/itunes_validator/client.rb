@@ -14,8 +14,8 @@ module ItunesValidator
   class Client
     def initialize(options=nil)
       @shared_secret = options[:shared_secret] if options
-      @use_latest = (options[:use_latest] if options) || true
-      @return_latest_too = (options[:return_latest_too] if options) || true
+      @use_latest = (true unless options && options.has_key?(:use_latest)) || !!options[:use_latest]
+      @return_latest_too = (true unless options && options.has_key?(:return_latest_too)) || !!options[:return_latest_too]
       @proxy = [options[:proxy_host], options[:proxy_port] || 8080] if (options && options[:proxy_host])
     end
 
