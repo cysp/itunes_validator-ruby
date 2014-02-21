@@ -40,7 +40,7 @@ module ItunesValidator
 
           case itunes_status = response_body['status'].to_i
             when 0
-              receipt_info = response_body['receipt']['in_app']
+              receipt_info = response_body['receipt']
               latest_receipt_info = response_body['latest_receipt_info']
             else
               raise ItunesValidationError.new(itunes_status)
@@ -55,8 +55,8 @@ module ItunesValidator
         end
       end
 
-      receipts = {'receipt' => receipt_info.map { |ri| Receipt.from_h(ri) if ri },
-      'latest_receipt_info' => latest_receipt_info.map{ |ri| Receipt.from_h(ri) if ri } }
+      receipts = {'receipt' => AppReceipt.from_h(receipt_info),
+      'latest_receipt_info' => latest_receipt_info.map{ |ri| ItemReceipt.from_h(ri) if ri } }
 
       if @use_latest
         return receipts['latest_receipt_info'].compact.last

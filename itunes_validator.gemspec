@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/cysp/itunes_validator-ruby'
 
   meta_files    = %w| LICENSE README.md Rakefile itunes_validator.gemspec |
-  lib_files     = %w| lib/itunes_validator.rb lib/itunes_validator/client.rb lib/itunes_validator/receipt.rb |
+  lib_files     = %w| lib/itunes_validator.rb lib/itunes_validator/client.rb lib/itunes_validator/app_receipt.rb lib/itunes_validator/item_receipt.rb|
   test_files    = %w| test/coverage.rb test/test_itunes_validator.rb |
   s.test_files  = test_files.select{ |f| File.extname(f) == 'rb' && File.basename(f).start_with?('test_') }
   s.files       = meta_files + lib_files + test_files
