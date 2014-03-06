@@ -10,12 +10,13 @@ Gem::Specification.new do |s|
   s.email       = 's@chikachow.org'
   s.summary     = 'iTunes Receipt validation'
   s.homepage    = 'https://github.com/cysp/itunes_validator-ruby'
+  s.description = 'iTunes Receipt validation. Sends an app or transaction receipt to app store and sends back a collection of objects representing either the receipt for the last purchased item, or the entire app receipt.'
 
   meta_files    = %w| LICENSE README.md Rakefile itunes_validator.gemspec |
-  lib_files     = %w| lib/itunes_validator.rb lib/itunes_validator/client.rb lib/itunes_validator/receipt.rb |
+  lib_files     = %w| lib/itunes_validator.rb lib/itunes_validator/client.rb lib/itunes_validator/app_receipt.rb lib/itunes_validator/item_receipt.rb|
   test_files    = %w| test/coverage.rb test/test_itunes_validator.rb |
   s.test_files  = test_files.select{ |f| File.extname(f) == 'rb' && File.basename(f).start_with?('test_') }
   s.files       = meta_files + lib_files + test_files
 
-  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rake', '~> 0'
 end

@@ -14,8 +14,8 @@ module ItunesValidator
   class Client
     def initialize(options=nil)
       @shared_secret = options[:shared_secret] if options
-      @use_latest = (options[:use_latest] if options) || true
-      @return_latest_too = (options[:return_latest_too] if options) || true
+      @use_latest = (true unless options && options.has_key?(:use_latest)) || !!options[:use_latest]
+      @return_latest_too = (true unless options && options.has_key?(:return_latest_too)) || !!options[:return_latest_too]
       @proxy = [options[:proxy_host], options[:proxy_port] || 8080] if (options && options[:proxy_host])
     end
 
@@ -55,10 +55,11 @@ module ItunesValidator
         end
       end
 
-      receipts = [receipt_info, latest_receipt_info].map{ |ri| Receipt.from_h(ri) if ri }
+      receipts = {'receipt' => AppReceipt.from_h(receipt_info),
+      'latest_receipt_info' => latest_receipt_info.map{ |ri| ItemReceipt.from_h(ri) if ri } }
 
       if @use_latest
-        return receipts.compact.last
+        return receipts['latest_receipt_info'].compact.last
       end
 
       if @return_latest_too

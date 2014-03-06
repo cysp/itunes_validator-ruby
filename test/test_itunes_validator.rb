@@ -85,18 +85,6 @@ class TestItunesValidator < Test::Unit::TestCase
     end
   end
 
-  def test_invalid_parameters_nil_options
-    assert_raises(ItunesValidator::ParameterError) do
-      ItunesValidator.validate(nil)
-    end
-    assert_raises(ItunesValidator::ParameterError) do
-      ItunesValidator.validate('')
-    end
-    assert_raises(ItunesValidator::ParameterError) do
-      ItunesValidator.validate(' ')
-    end
-  end
-
   def test_invalid_parameters_no_receipt
     assert_raises(ItunesValidator::ParameterError) do
       ItunesValidator.validate({shared_secret: 'secret'}, nil)
