@@ -55,8 +55,21 @@ module ItunesValidator
         end
       end
 
-      receipts = {'receipt' => AppReceipt.from_h(receipt_info),
-      'latest_receipt_info' => latest_receipt_info.map{ |ri| ItemReceipt.from_h(ri) if ri } }
+      is_new_style = receipt_info.has_key?('in_app')
+
+      if is_new_style then
+        receipts = {
+          'receipt' => AppReceipt.from_h(receipt_info),
+          'latest_receipt_info' => latest_receipt_info.map{ |ri| ItemReceipt.from_h(ri) if ri },
+        }
+      else
+        receipt = LegacyIapReceipt.from_h(receipt_info) if receipt_info
+        latest_receipt = LegacyIapReceipt.from_h(latest_receipt_info) if latest_receipt_info
+        receipts = {
+          'receipt' => receipt,
+          'latest_receipt_info' => [receipt, latest_receipt],
+        }
+      end
 
       if @use_latest
         return receipts['latest_receipt_info'].compact.last
@@ -66,7 +79,7 @@ module ItunesValidator
         return receipts
       end
 
-      receipts[0]
+      receipts['receipt']
     end
   end
 
